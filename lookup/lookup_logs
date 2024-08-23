@@ -1,0 +1,2 @@
+ERROR: 2024/08/23 11:42:53 PostgreSQL Connection Error: dial tcp [::1]:5432: connect: connection refused
+ERROR: 2024/08/23 11:42:53 PostgreSQL error on SELECT: dial tcp [::1]:5432: connect: connection refused table: reservations 
