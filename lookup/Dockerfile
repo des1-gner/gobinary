@@ -4,12 +4,16 @@ FROM amazonlinux:2023
 RUN yum install -y git \
     && git clone https://github.com/des1-gner/gobinary.git
 
-# Change permissions for necessary files
-RUN cd gobinary/lookup \
-    && chmod 777 server.ini \
-    && chmod 777 ws-ec2-lookup
- 
+# Set working directory to where server.ini is located
+WORKDIR /gobinary/lookup
+
+# Ensure proper file permissions
+RUN chmod 755 server.ini \
+    && chmod 755 ws-ec2-lookup
+
+# Expose necessary ports
 EXPOSE 80
 EXPOSE 5432
- 
-CMD sudo ./ws-ec2-lookup
+
+# Run the application
+CMD ./ws-ec2-lookup
