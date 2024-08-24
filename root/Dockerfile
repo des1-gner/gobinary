@@ -1,21 +1,19 @@
 FROM amazonlinux:2023
 
-# Install git and clone the repository
-RUN yum install -y git \
+# Install git, memcached, and clone the repository
+RUN yum install -y git memcached \
     && git clone https://github.com/des1-gner/gobinary.git
 
-# Install memcached
-RUN yum install -y memcached
+# Set working directory to where server.ini is located
+WORKDIR /gobinary/root
 
-# Start memcached directly as user 'nobody' (in the background)
-RUN memcached -d -u nobody
+# Ensure proper file permissions
+RUN chmod 755 server.ini \
+    && chmod 755 ws-ec2-root
 
-# Change permissions for necessary files
-RUN cd gobinary/root \
-    && chmod 777 server.ini \
-    && chmod 777 ws-ec2-root
- 
+# Expose the necessary ports
 EXPOSE 80
 EXPOSE 11211
- 
-CMD sudo ./ws-ec2-root
+
+# Start both memcached and the Go application using a startup script
+CMD ["sh", "-c", "memcached -u nobody & ./ws-ec2-root"]
